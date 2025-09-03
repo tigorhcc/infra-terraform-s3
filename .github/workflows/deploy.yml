@@ -1,0 +1,28 @@
+name: Terraform Deploy
+
+on:
+  workflow_dispatch:  # Permite execução manual
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Inicializar Terraform
+        run: terraform init
+
+      - name: Validar sintaxe
+        run: terraform validate
+
+      - name: Aplicar infraestrutura
+        run: terraform apply -auto-approve
